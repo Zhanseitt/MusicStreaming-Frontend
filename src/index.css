@@ -6,23 +6,28 @@
   font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  /* Сообщаем браузеру, что поддерживаем обе темы */
   color-scheme: light dark; 
 }
 
+/* ===============================================
+   ГЛОБАЛЬНЫЕ СТИЛИ ТЕЛА (BODY)
+   =============================================== */
 body {
   margin: 0;
   min-height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow-x: hidden; /* Убираем гориз. скролл */
   
-  /* --- БАЗОВЫЕ СТИЛИ (СВЕТЛАЯ ТЕМА) --- */
+  /* --- СВЕТЛАЯ ТЕМА (по умолчанию) --- */
   background-color: #f3f4f6; /* Светло-серый фон */
-  color: #111827;            /* Темно-серый текст (почти черный) */
+  color: #111827;            /* Темно-серый текст */
   
+  /* Плавный переход цветов при смене темы */
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-/* --- СТИЛИ ДЛЯ ТЕМНОЙ ТЕМЫ --- */
+/* --- ТЕМНАЯ ТЕМА (.dark) --- */
 .dark body {
   background-color: #050505; /* Глубокий черный фон */
   color: #ffffff;            /* Белый текст */
@@ -33,7 +38,11 @@ body {
   width: 100vw;
 }
 
-/* --- ЖИВОЙ ФОН --- */
+/* ===============================================
+   ФОНОВЫЕ ЭФФЕКТЫ (Backgrounds)
+   =============================================== */
+
+/* --- ЖИВОЙ ФОН (Live Background) --- */
 .live-background {
   position: fixed;
   top: 0;
@@ -44,19 +53,17 @@ body {
   overflow: hidden;
   pointer-events: none;
   transition: background 0.5s ease;
+  
+  /* Фон для СВЕТЛОЙ темы */
+  background: #f3f4f6;
 }
 
-/* ФОН: ТЕМНАЯ ТЕМА */
+/* Фон для ТЕМНОЙ темы */
 .dark .live-background {
   background: #050505;
 }
 
-/* ФОН: СВЕТЛАЯ ТЕМА */
-.live-background {
-  background: #f3f4f6;
-}
-
-/* --- ЦВЕТНЫЕ ПЯТНА (BLOBS) --- */
+/* --- ЦВЕТНЫЕ ПЯТНА (Blobs) --- */
 .blob {
   position: absolute;
   border-radius: 50%;
@@ -82,7 +89,17 @@ body {
   100% { transform: translate(-20px, 20px) scale(0.95); }
 }
 
-/* --- ЧАСТИЦЫ --- */
+/* --- ШУМ (Noise Overlay) --- */
+.noise-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: -1;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ===============================================
+   ЧАСТИЦЫ (Particles)
+   =============================================== */
 .particles-container {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -98,7 +115,7 @@ body {
     animation: rise-particle linear infinite;
     transition: background-color 0.5s ease, box-shadow 0.5s ease;
     
-    /* СВЕТЛАЯ ТЕМА -> ТЕМНЫЕ ЧАСТИЦЫ */
+    /* СВЕТЛАЯ ТЕМА -> ТЕМНЫЕ ЧАСТИЦЫ (чтобы их было видно) */
     background: #374151; 
     box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.2);
 }
@@ -116,253 +133,9 @@ body {
     100% { opacity: 0; transform: translateY(-110vh) scale(1.2); }
 }
 
-/* --- ВИЗУАЛАЙЗЕР --- */
-.visualizer-bar {
-    width: 3px;
-    background-color: #4f46e5; /* Indigo-600 для светлой темы */
-    border-radius: 2px;
-    animation: bounce 0.5s infinite ease-in-out alternate;
-}
-.dark .visualizer-bar { background-color: #a5b4fc; /* Светлый индиго для темной */ }
-
-@keyframes bounce {
-    0% { height: 5px; }
-    100% { height: 20px; }
-}
-
-/* --- ШУМ И СКРОЛЛ --- */
-.noise-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: -1;
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-}
-
-.custom-scrollbar::-webkit-scrollbar { width: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { border-radius: 10px; transition: background-color 0.3s; }
-
-/* Ползунок: Темный в светлой теме, Светлый в темной */
-.custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.2); }
-.dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.15); }
-
-.soft-text-shadow { text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-.animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
-@keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* --- АНИМАЦИЯ УСПЕШНОЙ ОПЛАТЫ --- */
-@keyframes success-pop {
-    0% { transform: scale(0); opacity: 0; }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.animate-success {
-    animation: success-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-@keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 0.5; }
-    100% { transform: scale(2); opacity: 0; }
-}
-
-.animate-pulse-ring::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; right: 0; bottom: 0;
-    border-radius: 50%;
-    border: 2px solid #22c55e; /* Green-500 */
-    animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-}
-
 /* ===============================================
-   АНИМАЦИИ ДЛЯ ПРОФИЛЯ
+   СКРОЛЛБАР (Scrollbar)
    =============================================== */
-
-/* --- ПЛАВАЮЩИЕ BLOB-ЧАСТИЦЫ --- */
-@keyframes blob {
-  0%, 100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-}
-
-.animate-blob {
-  animation: blob 7s infinite ease-in-out;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
-/* --- ГРАДИЕНТНАЯ АНИМАЦИЯ --- */
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient 3s ease infinite;
-}
-
-/* --- ПУЛЬСАЦИЯ С ЭФФЕКТОМ СВЕЧЕНИЯ --- */
-@keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3),
-                0 0 40px rgba(139, 92, 246, 0.2),
-                0 0 60px rgba(139, 92, 246, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5),
-                0 0 60px rgba(139, 92, 246, 0.3),
-                0 0 90px rgba(139, 92, 246, 0.2);
-  }
-}
-
-.animate-glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite;
-}
-
-/* --- МЯГКАЯ SHAKE АНИМАЦИЯ --- */
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-  20%, 40%, 60%, 80% { transform: translateX(2px); }
-}
-
-.animate-shake {
-  animation: shake 0.5s ease-in-out;
-}
-
-/* --- ВРАЩЕНИЕ С ЗАМЕДЛЕНИЕМ --- */
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
-}
-
-/* --- ПОЯВЛЕНИЕ СНИЗУ --- */
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.4s ease-out forwards;
-}
-
-/* --- HEARTBEAT АНИМАЦИЯ --- */
-@keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  10%, 30% { transform: scale(1.1); }
-  20%, 40% { transform: scale(1); }
-}
-
-.animate-heartbeat {
-  animation: heartbeat 1.5s ease-in-out infinite;
-}
-
-/* --- ЭФФЕКТ МЕРЦАНИЯ --- */
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-.animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
-  background-size: 1000px 100%;
-  animation: shimmer 2s infinite;
-}
-
-/* --- WAVE ЭФФЕКТ --- */
-@keyframes wave {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.animate-wave {
-  animation: wave 2s ease-in-out infinite;
-}
-
-/* --- BOUNCE С ЗАДЕРЖКОЙ --- */
-@keyframes bounce-delay {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
-.animate-bounce-delay {
-  animation: bounce-delay 1s ease-in-out infinite;
-}
-
-/* --- FADE IN WITH SCALE --- */
-@keyframes fade-in-scale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-fade-in-scale {
-  animation: fade-in-scale 0.3s ease-out forwards;
-}
-
-/* --- ROTATE AND SCALE --- */
-@keyframes rotate-scale {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(180deg) scale(1.2);
-  }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
-}
-
-.animate-rotate-scale {
-  animation: rotate-scale 2s ease-in-out infinite;
-}
-
-/* --- УЛУЧШЕННЫЙ SCROLLBAR ДЛЯ ПРОФИЛЯ --- */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
@@ -377,56 +150,184 @@ body {
   background: transparent;
 }
 
+/* Ползунок в СВЕТЛОЙ ТЕМЕ (темный полупрозрачный) */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.3);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   transition: background-color 0.3s;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
+/* Ползунок в ТЕМНОЙ ТЕМЕ (светлый полупрозрачный) */
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(167, 139, 250, 0.3);
+  background-color: rgba(255, 255, 255, 0.15);
 }
-
 .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(167, 139, 250, 0.5);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* --- HOVER ЭФФЕКТЫ ДЛЯ КАРТОЧЕК --- */
+/* ===============================================
+   UI КОМПОНЕНТЫ И ЭФФЕКТЫ
+   =============================================== */
+
+/* --- СТЕКЛЯННЫЙ ЭФФЕКТ (Glassmorphism) --- */
+.glass-effect {
+  /* Светлая тема: более плотный белый, чтобы текст читался */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .glass-effect {
+  /* Темная тема: классическое темное стекло */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- ВИЗУАЛАЙЗЕР --- */
+.visualizer-bar {
+    width: 3px;
+    background-color: #4f46e5; /* Indigo-600 для светлой */
+    border-radius: 2px;
+    animation: bounce 0.5s infinite ease-in-out alternate;
+}
+.dark .visualizer-bar { 
+    background-color: #a5b4fc; /* Светлый индиго для темной */
+}
+
+@keyframes bounce {
+    0% { height: 5px; }
+    100% { height: 20px; }
+}
+
+/* --- ТЕНИ --- */
+.soft-text-shadow { text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+
+.shadow-3xl {
+  box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.15); /* Светлая тень */
+}
+.dark .shadow-3xl {
+  box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.6); /* Темная тень */
+}
+
+/* --- HOVER ЭФФЕКТЫ --- */
 .card-hover {
   transition: all 0.3s ease;
 }
-
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
-
 .dark .card-hover:hover {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* --- СТЕКЛЯННЫЙ ЭФФЕКТ --- */
-.glass-effect {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* ===============================================
+   АНИМАЦИИ (Animations)
+   =============================================== */
+
+/* Fade In */
+.animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+@keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Success Pop */
+@keyframes success-pop {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+.animate-success {
+    animation: success-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-.dark .glass-effect {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Pulse Ring */
+@keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    100% { transform: scale(2); opacity: 0; }
+}
+.animate-pulse-ring::before {
+    content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    border: 2px solid #22c55e;
+    animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
 
-/* --- ТЕНИ ДЛЯ КАРТОЧЕК --- */
-.shadow-3xl {
-  box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+/* Blob Animation */
+@keyframes blob {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+.animate-blob { animation: blob 7s infinite ease-in-out; }
+
+/* Utility Delays */
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+/* Gradient */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient { background-size: 200% 200%; animation: gradient 3s ease infinite; }
+
+/* Glow Pulse */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+}
+.animate-glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+
+/* Shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 90% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+}
+.animate-shake { animation: shake 0.5s ease-in-out; }
+
+/* Spin Slow */
+@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 3s linear infinite; }
+
+/* Slide Up */
+@keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-slide-up { animation: slide-up 0.4s ease-out forwards; }
+
+/* Heartbeat */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.1); }
+  30% { transform: scale(1); }
+}
+.animate-heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+
+/* Shimmer */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
 }
 
-.dark .shadow-3xl {
-  box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.6);
+/* Wave */
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
+.animate-wave { animation: wave 2s ease-in-out infinite; }
+
+/* Rotate Scale */
+@keyframes rotate-scale {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+.animate-rotate-scale { animation: rotate-scale 2s ease-in-out infinite; }

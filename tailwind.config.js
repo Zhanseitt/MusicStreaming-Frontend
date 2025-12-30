@@ -2,8 +2,10 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", 
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  // Включаем поддержку темной темы через класс 'dark'
+  darkMode: 'class', 
   theme: {
     extend: {},
   },
